@@ -346,6 +346,7 @@ options_templates.update(options_section(('saving-paths', "Paths for saving"), {
     "outdir_img2img_grids": OptionInfo("outputs/img2img-grids", 'Output directory for img2img grids', component_args=hide_dirs),
     "outdir_save": OptionInfo("log/images", "Directory for saving images using the Save button", component_args=hide_dirs),
     "outdir_init_images": OptionInfo("outputs/init-images", "Directory for saving init images when using img2img", component_args=hide_dirs),
+    "out_image_async_save": OptionInfo(False, "async save output image"),
 }))
 
 options_templates.update(options_section(('saving-to-dirs', "Saving to a directory"), {

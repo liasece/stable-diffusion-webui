@@ -94,7 +94,7 @@ class Script(scripts.Script):
             result_images.append(combined_image)
 
             if opts.samples_save:
-                images.save_image(combined_image, p.outpath_samples, "", start_seed, p.prompt, opts.samples_format, info=initial_info, p=p)
+                images.async_save_image(combined_image, p.outpath_samples, "", start_seed, p.prompt, opts.samples_format, info=initial_info, p=p)
 
         processed = Processed(p, result_images, seed, initial_info)
 

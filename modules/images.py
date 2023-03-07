@@ -6,6 +6,7 @@ import math
 import os
 from collections import namedtuple
 import re
+import time
 
 import numpy as np
 import piexif
@@ -14,6 +15,7 @@ from PIL import Image, ImageFont, ImageDraw, PngImagePlugin
 import string
 import json
 import hashlib
+from threading import Thread
 
 from modules import sd_samplers, shared, script_callbacks, errors
 from modules.paths_internal import roboto_ttf_file
@@ -496,6 +498,30 @@ def get_next_sequence_number(path, basename):
 
     return result + 1
 
+async_save_image_list=[]
+
+def async_save_image_thread():
+    while True:
+        # check async_save_image_list has items
+        while len(async_save_image_list) > 0:
+            args = async_save_image_list[0]
+            save_image(*args)
+            del async_save_image_list[0]
+        time.sleep(0.5)
+
+def start_async_save_image_thread():
+    tr = Thread(target=async_save_image_thread, args=())
+    tr.start()
+start_async_save_image_thread()
+
+def is_async_save_image_finished():
+    return len(async_save_image_list) == 0
+
+def async_save_image(image, path, basename, seed=None, prompt=None, extension='png', info=None, short_filename=False, no_prompt=False, grid=False, pnginfo_section_name='parameters', p=None, existing_info=None, forced_filename=None, suffix="", save_to_dirs=None):
+    if opts.out_image_async_save:
+        async_save_image_list.append((image, path, basename, seed, prompt, extension, info, short_filename, no_prompt, grid, pnginfo_section_name, p, existing_info, forced_filename, suffix, save_to_dirs))
+    else:
+        return save_image(image, path, basename, seed, prompt, extension, info, short_filename, no_prompt, grid, pnginfo_section_name, p, existing_info, forced_filename, suffix, save_to_dirs)
 
 def save_image_with_geninfo(image, geninfo, filename, extension=None, existing_pnginfo=None):
     if extension is None:

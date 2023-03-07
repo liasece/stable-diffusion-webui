@@ -711,7 +711,7 @@ class Script(scripts.Script):
             for g in range(grid_count):
                 #TODO: See previous comment about intentional data misalignment.
                 adj_g = g-1 if g > 0 else g
-                images.save_image(processed.images[g], p.outpath_grids, "xyz_grid", info=processed.infotexts[g], extension=opts.grid_format, prompt=processed.all_prompts[adj_g], seed=processed.all_seeds[adj_g], grid=True, p=processed)
+                images.async_save_image(processed.images[g], p.outpath_grids, "xyz_grid", info=processed.infotexts[g], extension=opts.grid_format, prompt=processed.all_prompts[adj_g], seed=processed.all_seeds[adj_g], grid=True, p=processed)
 
         if not include_sub_grids:
             # Done with sub-grids, drop all related information:
